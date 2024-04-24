@@ -30,7 +30,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.command()
-async def create(ctx, *, arg):
+async def startgame(ctx, *, arg):
     print(arg)
 
     currentGameCategory = discord.utils.get(ctx.guild.categories, name="CURRENT GAME")
@@ -38,15 +38,18 @@ async def create(ctx, *, arg):
 
     currentGameChannels = currentGameCategory.channels
 
+    #If there are still channels in Current, move them to archive
     if len(currentGameChannels) > 0:
         for channel in currentGameChannels:
             await channel.edit(category=archiveCategory)
 
+    #Create standard 4 channels
     dayChannel = await ctx.guild.create_text_channel(f'{arg}-day-chat')
     nightChannel = await ctx.guild.create_text_channel(f'{arg}-night-chat')
-    heavenChannel = await ctx.guild.create_text_channel('heaven-chat')
-    wolfChannel = await ctx.guild.create_text_channel('wolf-chat')
+    heavenChannel = await ctx.guild.create_text_channel(f'{arg}-heaven-chat')
+    wolfChannel = await ctx.guild.create_text_channel(f'{arg}-wolf-chat')
 
+    #Add new channels to Current Game Category
     await dayChannel.edit(category=currentGameCategory)
     await nightChannel.edit(category=currentGameCategory)
     await heavenChannel.edit(category=currentGameCategory)
